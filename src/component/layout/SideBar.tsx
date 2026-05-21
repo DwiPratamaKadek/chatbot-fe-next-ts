@@ -1,44 +1,42 @@
 import { faBars, faXmark, faClone, faArrowRotateBack } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import HistoryPage from "../pages/history-page/HistoryPage";
 
-import { useSideBar } from "@/hooks/useSideBar"
+import { useSideBar } from "@/hooks/lyouts/useSideBar"
 
+import { MenuItem } from "@/constants/sideBarMenu";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function SideBar() {
 
-    const {isOpen, setIsOpen, handleOpen} = useSideBar();
+    const {isOpen, handleOpen} = useSideBar();
 
     return(
-        <aside className={`h-screen bg-gray-800 text-white  rounded-r-4xl ${isOpen? "w-64" : "w-20"}`}>
-            <div className="flex items-center  justify-around my-15">
-                <h3 className={`text-sm md:text-2xl ${isOpen? "opacity-100" : "opacity-0"}`}>HYC</h3>
-                <button onClick={handleOpen} className="rounded-xl ">
-                    <FontAwesomeIcon icon={isOpen? faXmark : faBars } className="text-sm md:text-xl text-gray-500"/>
-                </button>
-            </div>
-            <nav className="">
-                <ul className="space-y-1">
-                    <li>
-                        <Link href={"/chat"}>
-                            <div className="flex justify-around items-center">
-                                <FontAwesomeIcon icon={faClone} />
-                                <p>New Chat</p>
-                            </div>
-                        </Link>
-                    </li>
-                    <br />
-                    <li>
-                        <Link href={"/history"}>
-                            <div className="flex justify-around items-center">
-                                <FontAwesomeIcon icon={faArrowRotateBack} />
-                                <p>History</p>
-                            </div>
-                        </Link>
-                    </li>
+        <div className={`grid grid-rows-[auto_1fr_1fr_1fr] rounded-xl text-white bg-gray-800 h-full fixed transform transition-all duration-300 delay-75 ${isOpen? "w-64" : "w-24"}`}>
+            {/* header logo+button */}
+            <button className="flex ">
+                <p>HYC</p>
+                <FontAwesomeIcon icon={isOpen? faXmark : faBars} onClick={handleOpen}/>
+            </button>
+            {/* Side Bar Menu */}
+            <aside className="mx-2">
+                <ul className="list-none">
+                    {MenuItem.map((menu, index) => (
+                        <li key={index} >
+                            <Link href={menu.href} className={`flex gap-2 ${isOpen? "justify-start" : "justify-center"}`}>
+                                <FontAwesomeIcon icon={menu.icon}/>
+                                <p className={`transition-all duration-300  ${isOpen? "opacity-100" : "opacity-0 "}`}>{menu.name}</p>
+                            </Link>
+                        </li> 
+                    ))}
                 </ul>
-            </nav>
-        </aside>
+            </aside>
+            <div>
+                <HistoryPage/>  
+            </div>
+            <div>
+                <p> copy right </p>
+            </div>
+        </div>
     )
 }

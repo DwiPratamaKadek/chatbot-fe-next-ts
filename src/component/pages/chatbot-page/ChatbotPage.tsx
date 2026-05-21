@@ -1,20 +1,32 @@
 'use client'; 
 
-import ChatResponse from "@/component/ui/ChatResponse";
-import TextInput from "@/component/ui/TextInput";
+import ChatResponse from "@/component/ui/chat/ChatResponse";
+import TextInput from "@/component/ui/text-input/TextInput";
 import SideBar from "@/component/layout/SideBar";
-
-import { useChat } from "@/hooks/useChat";
+import { useParams } from "next/navigation";
+import { useChat } from "@/hooks/oprasional/useChat";
 
 export default function ChatbotPage() {
+    const params = useParams()
 
-    const {message, answare, setMessage, handleSendMessage} = useChat();
+    const sessionId = params.id as string
+    const {message, chat, setMessage, handleSendMessage} = useChat(sessionId);
 
     return(
-        <section className="flex bg-gray-900 text-white ">
+        <section className="flex h-screen bg-gray-900 ">
             <SideBar></SideBar>
-            <TextInput value={message} onChange={(e) => setMessage(e.target.value)} onSend={handleSendMessage} />
-            <ChatResponse>{answare}</ChatResponse>
+            <div className="flex justify-center w-full p-6">
+                <div className="flex flex-col text-white ">
+                    <ChatResponse className="flex flex-col text-3xl">
+                           {chat.map((c,i) => (
+                                <div key={i} className={`${c.role === "user"? "text-left":"text-right"}`}>
+                                    <p>{c.message}</p>
+                                </div>
+                           ))}
+                    </ChatResponse>
+                    <TextInput value={message} onChange={(e) => setMessage(e.target.value)} onSend={handleSendMessage} />
+                </div>  
+            </div>
         </section>
     )
 }
