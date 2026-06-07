@@ -9,7 +9,7 @@ export default function HistoryPage(){
     const {room} = useHistory()
 
     return(
-        <section className="grid gap-2 px-2 py-2">
+        <section className="grid gap-2 ">
             {room.map((h) => (
                 <button key={h.id} onClick={() => router.push(`/chat/${h.id}`)} className="border border-gray-600 rounded-md bg-gray-500">
                     {h.title}
